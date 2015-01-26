@@ -23,11 +23,11 @@ as
 					2014-10-09	Updated L1/L2 Sales Territory Logic
 					2014-10-29  Added Cost Center OEM logic
 					2014-11-05  Updated logic to relfect changes to MDMInvoice and MDMInvoiceLineItem
-		
+					2015-01-22	SN:	Added FreightAmount
+					2015-01-22	SN:	Added Item Category, Order Type and Order Reason
+
 	Modified by:	Sergei Nemirovsky
-	Modified on:	2015-01-22
-	
-	Notes:			2015-01-22	SN:	Added FreightAmount
+	Modified on:	2015-01-26
 */
 
 
@@ -81,9 +81,17 @@ SELECT
 	 ,i.[Quantity]															as [Quantity]
      ,i.[TotalPrice]														as [Net Revenue]
 	 ,h.FreightAmount														as [Freight Amount]
-
+	 ,ic.Description														as [ItemCategory]
+	 ,rc.Description														as [ReasonCode]
+	 ,ot.Description														as [OrderType]
 from	
 	[MDMInvoice] as h
 	inner join [MDMInvoiceLineItem]	as i on h.InvoiceNumber = i.invoiceNumber
+	inner join [MDMOrder] o on (h.OrderNumber = o.OrderNumber)
+	inner join [MDMOrderLineItem] oi on (o.OrderNumber = oi.SalesDocument and i.SAPProductCode = oi.Material)
+	left outer join SAPStaging.dbo.REASON_CODES rc on oi.ReasonCode = rc.ReasonCode
+	left outer join SAPStaging.dbo.ITEM_CATEGORIES ic on ic.ItemCategory = oi.ItemCategory 
+	left outer join SAPStaging.dbo.ORDER_TYPES ot on ot.OrderType = o.OrderSalesDocumentType
+	
 GO
 
