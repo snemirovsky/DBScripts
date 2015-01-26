@@ -81,9 +81,9 @@ SELECT
 	 ,i.[Quantity]															as [Quantity]
      ,i.[TotalPrice]														as [Net Revenue]
 	 ,h.FreightAmount														as [Freight Amount]
-	 ,ic.Description														as [ItemCategory]
-	 ,rc.Description														as [ReasonCode]
-	 ,ot.Description														as [OrderType]
+	 ,ic.Description														as [Item Category]
+	 ,rc.Description														as [Order Reason]
+	 ,ot.Description														as [Order Type]
 from	
 	[MDMInvoice] as h
 	inner join [MDMInvoiceLineItem]	as i on h.InvoiceNumber = i.invoiceNumber
